@@ -1,24 +1,41 @@
 import requests
 import changedStockEntity
 import chardet
+from changedStockEntity import ChangedStock 
+import chromedriver_binary
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 
-def getChangedStocks(url):
-    req = requests.get(url)
-    req.encoding = chardet.detect(req.content)['encoding']
-    soup = BeautifulSoup(req.text, 'html.parser')
+def getPage(url):
+    options = Options()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
+    driver.get(url)
+    page = driver.page_source.encode('utf-8')
+    return page
+
+def getChangedStocks(html):
+    soup = BeautifulSoup(html, 'html.parser')
     stocks = []
-    tbody = soup.find('div', attrs={'id': 'content'})
-    print(tbody)
+    tbody = soup.find('tbody')
     if not tbody:
         return stocks
     trs = tbody.find_all('tr')
     for tr in trs:
         tds = tr.find_all('td')
+        for td in tds:
+            stock = ChangedStock(tds[0].get_text(), tds[1].get_text(), 
+            tds[2].get_text(), tds[3].get_text(), tds[4].get_text())
+            stocks.append(stock)
     return stocks
 
 def printStocks():
     url = 'https://kabu.com/investment/meigara/tani_henkou.html'
-    stocks = getChangedStocks(url)
+    page = getPage(url)
+    stocks = getChangedStocks(page)
+    for stock in stocks:
+        print(stock)
 
 printStocks()

@@ -1,6 +1,10 @@
 class ChangedStock:
-    def __init__(self, val1, val2, val3, val4):
-        self.startTime = val1
-        self.stadium = val2
-        self.homeTeam = val3
-        self.awayTeam = val4
+    def __init__(self, val1, val2, val3, val4, val5):
+        self.date = val1
+        self.code = val2
+        self.name = val3
+        self.oldUnit = val4
+        self.newUnit = val5
+    
+    def __str__ (self):
+        return self.date + ',' + self.code + ',' + self.name + ',' + self.oldUnit + ',' +self.newUnit
