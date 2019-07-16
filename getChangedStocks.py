@@ -25,10 +25,9 @@ def getChangedStocks(html):
     trs = tbody.find_all('tr')
     for tr in trs:
         tds = tr.find_all('td')
-        for td in tds:
-            stock = ChangedStock(tds[0].get_text(), tds[1].get_text(), 
-            tds[2].get_text(), tds[3].get_text(), tds[4].get_text())
-            stocks.append(stock)
+        stock = ChangedStock(tds[0].get_text(), tds[1].get_text(), 
+        tds[2].get_text(), tds[3].get_text(), tds[4].get_text())
+        stocks.append(stock)
     return stocks
 
 def printStocks():
